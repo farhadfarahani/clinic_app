@@ -182,7 +182,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>928</x>
+      <x>915</x>
       <y>100</y>
       <width>23</width>
       <height>21</height>
@@ -209,7 +209,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>698</x>
+      <x>668</x>
       <y>100</y>
       <width>91</width>
       <height>21</height>
@@ -236,7 +236,7 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>438</x>
+      <x>408</x>
       <y>100</y>
       <width>91</width>
       <height>21</height>
@@ -263,7 +263,7 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>231</x>
+      <x>181</x>
       <y>100</y>
       <width>71</width>
       <height>21</height>
@@ -290,7 +290,7 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>1103</x>
+      <x>1123</x>
       <y>100</y>
       <width>41</width>
       <height>21</height>
@@ -314,33 +314,13 @@
      <string>درجه:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>975</x>
-      <y>100</y>
-      <width>131</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Vazirmatn</family>
-      <pointsize>9</pointsize>
-      <underline>false</underline>
-     </font>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_2">
     <property name="geometry">
      <rect>
-      <x>813</x>
-      <y>100</y>
-      <width>113</width>
-      <height>22</height>
+      <x>782</x>
+      <y>98</y>
+      <width>131</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="font">
@@ -352,15 +332,18 @@
     </property>
     <property name="layoutDirection">
      <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_3">
     <property name="geometry">
      <rect>
-      <x>553</x>
-      <y>100</y>
+      <x>523</x>
+      <y>98</y>
       <width>151</width>
-      <height>22</height>
+      <height>24</height>
      </rect>
     </property>
     <property name="font">
@@ -377,10 +360,10 @@
    <widget class="QLineEdit" name="lineEdit_4">
     <property name="geometry">
      <rect>
-      <x>325</x>
-      <y>100</y>
-      <width>113</width>
-      <height>22</height>
+      <x>275</x>
+      <y>98</y>
+      <width>131</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="font">
@@ -397,10 +380,10 @@
    <widget class="QLineEdit" name="lineEdit_5">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>100</y>
-      <width>131</width>
-      <height>22</height>
+      <x>40</x>
+      <y>98</y>
+      <width>141</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="font">
@@ -564,36 +547,6 @@
     <property name="rowCount">
      <number>0</number>
     </property>
-    <column>
-     <property name="text">
-      <string>شماره پرونده</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>درجه</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>نام</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>نام خانوادگی</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>شماره پرسنلی</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>شماره ملی</string>
-     </property>
-    </column>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
@@ -663,6 +616,26 @@
     </property>
     <property name="text">
      <string>آزمایش</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>962</x>
+      <y>98</y>
+      <width>161</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Vazirmatn</family>
+      <pointsize>9</pointsize>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
     </property>
    </widget>
   </widget>
