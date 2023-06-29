@@ -1,5 +1,3 @@
 venv/
-main.ui
-patology.ui
-test.ui
+.ui/
 resource_clinic.qrc

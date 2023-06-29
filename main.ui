@@ -637,6 +637,21 @@
     <property name="layoutDirection">
      <enum>Qt::RightToLeft</enum>
     </property>
+    <item>
+     <property name="text">
+      <string>سرتیپ</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>سرتیپ دوم</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>کارمند</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
