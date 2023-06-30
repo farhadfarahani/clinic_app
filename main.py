@@ -1,11 +1,10 @@
-import pyodbc
+
 import patology as patologys
 import test as tests
 import resource_clinic_rc
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 from patology import UiPatology
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 
@@ -239,13 +238,13 @@ class UiMainWindow(object):
         font.setUnderline(False)
         self.tableView.setFont(font)
         self.tableView.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.tableView.setFrameShape(QtWidgets.QFrame.Box)
-        self.tableView.setLineWidth(2)
-        self.tableView.setMidLineWidth(1)
-        self.tableView.setDragEnabled(False)
-        self.tableView.setShowGrid(True)
-        self.tableView.setGridStyle(QtCore.Qt.SolidLine)
-        self.tableView.setWordWrap(True)
+        # self.tableView.setFrameShape(QtWidgets.QFrame.Box)
+        # self.tableView.setLineWidth(2)
+        # self.tableView.setMidLineWidth(1)
+        # self.tableView.setDragEnabled(False)
+        # self.tableView.setShowGrid(True)
+        # self.tableView.setGridStyle(QtCore.Qt.SolidLine)
+        # self.tableView.setWordWrap(True)
         self.tableView.setObjectName("tableView")
         self.pushButtonsearch = QtWidgets.QPushButton(self.centralwidget)
         self.pushButtonsearch.setGeometry(QtCore.QRect(50, 460, 171, 28))
@@ -294,8 +293,7 @@ class UiMainWindow(object):
 
         self.retranslateUi(mainWindow)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
-
-
+        
 
         db = QtSql.QSqlDatabase.addDatabase("QODBC")
         db.setDatabaseName("DRIVER={ODBC Driver 17 for SQL Server};SERVER=DESKTOP-J8BACV4;DATABASE=clinic;UID=sa;PWD=62399")
@@ -313,14 +311,24 @@ class UiMainWindow(object):
             model.setHeaderData(3, QtCore.Qt.Horizontal, "نام خانوادگی")
             model.setHeaderData(4, QtCore.Qt.Horizontal, "شماره پرسنلی")
             model.setHeaderData(5, QtCore.Qt.Horizontal, "کد ملی")
-
             
             self.tableView.setModel(model)
 
             self.pushButtonsubmit.clicked.connect(self.addDataToDatabase)
+            self.pushButtondelete.clicked.connect(self.deleteDataFromDatabase)
+            self.pushButtonsubmit.clicked.connect(self.saveComboBoxDataToDatabase)
+            self.pushButtonedit.clicked.connect(self.updateDataInDatabase)
 
         else:
             print("Failed to connect to database")
+        
+        query = QtSql.QSqlQuery()
+        query.exec_("SELECT Rank FROM Ranks")
+
+        while query.next():
+            value = query.value(0)
+            self.comboBoxrank.addItem(value)
+            
 
 
 
@@ -328,13 +336,14 @@ class UiMainWindow(object):
         model = self.tableView.model()
 
         # Get the values from the QLineEdit fields
-        value1 = self.lineEditfirstname.text()
-        value2 = self.lineEditlastname.text()
-        value3 = self.lineEditpersonnelId.text()
-        value4 = self.lineEditnationalId.text()
+        value1 = self.comboBoxrank.currentText()
+        value2 = self.lineEditfirstname.text()
+        value3 = self.lineEditlastname.text()
+        value4 = self.lineEditpersonnelId.text()
+        value5 = self.lineEditnationalId.text()
 
         # Check if the fields are empty
-        if value1.strip() == "" or value2.strip() == "" or value3.strip() == "" or value4.strip() == "":
+        if value2.strip() == "" or value3.strip() == "" or value4.strip() == "" or value5.strip() == "":
             QMessageBox.warning(self, "Warning", "Please fill all the fields.")
 
         # Insert a new empty record
@@ -342,15 +351,26 @@ class UiMainWindow(object):
             print("Failed to insert record.")
             model.database().rollback()
             return
-
+        
+        if value1:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO Ranks (Rank) VALUES (?)")
+            query.addBindValue(value1)
+            if query.exec_():
+                print("Data inserted successfully.")
+            else:
+                print("Failed to insert data:", query.lastError().text())
+        else:
+            print("No value selected.")
         # Get the index of the new row
         index = model.index(0, 0)
 
         # Set the values in the record
-        model.setData(index.siblingAtColumn(2), value1, QtCore.Qt.EditRole)
-        model.setData(index.siblingAtColumn(3), value2, QtCore.Qt.EditRole)
-        model.setData(index.siblingAtColumn(4), value3, QtCore.Qt.EditRole)
-        model.setData(index.siblingAtColumn(5), value4, QtCore.Qt.EditRole)
+        model.setData(index.siblingAtColumn(1), value1, QtCore.Qt.EditRole)
+        model.setData(index.siblingAtColumn(2), value2, QtCore.Qt.EditRole)
+        model.setData(index.siblingAtColumn(3), value3, QtCore.Qt.EditRole)
+        model.setData(index.siblingAtColumn(4), value4, QtCore.Qt.EditRole)
+        model.setData(index.siblingAtColumn(5), value5, QtCore.Qt.EditRole)
 
         # Submit the changes to the model
         if model.submitAll():
@@ -359,11 +379,79 @@ class UiMainWindow(object):
         else:
             print("Failed to submit changes.")
             model.database().rollback()
+        
         self.lineEditfirstname.clear()
         self.lineEditlastname.clear()
         self.lineEditpersonnelId.clear()
         self.lineEditnationalId.clear()
     
+    def saveComboBoxDataToDatabase(self):
+        selectedValue = self.comboBoxrank.currentText()
+        if selectedValue:
+            query = QtSql.QSqlQuery()
+            query.prepare("INSERT INTO Ranks (Rank) VALUES (?)")
+            query.addBindValue(selectedValue)
+            if query.exec_():
+                print("Data inserted successfully.")
+            else:
+                print("Failed to insert data:", query.lastError().text())
+        else:
+            print("No value selected.")
+
+    def deleteDataFromDatabase(self):
+        model = self.tableView.model()
+        selectionModel = self.tableView.selectionModel()
+
+        # Check if any row is selected
+        if not selectionModel.hasSelection():
+            print("No row selected.")
+            return
+
+        # Get the selected row(s) index
+        indexes = selectionModel.selectedRows()
+
+        # Delete the selected row(s)
+        for index in indexes:
+            model.removeRow(index.row())
+
+        # Submit the changes to the model
+        if model.submitAll():
+            model.database().commit()
+            print("Record(s) deleted successfully.")
+        else:
+            print("Failed to submit changes.")
+            model.database().rollback()
+
+    def updateDataInDatabase(self):
+        selectedRow = self.tableView.currentIndex().row()
+        if selectedRow >= 0:
+            model = self.tableView.model()
+
+            value1 = self.comboBoxrank.currentText()
+            value2 = self.lineEditfirstname.text()
+            value3 = self.lineEditlastname.text()
+            value4 = self.lineEditpersonnelId.text()
+            value5 = self.lineEditnationalId.text()
+            
+            model.setData(model.index(selectedRow, 1), value1, QtCore.Qt.EditRole)
+            model.setData(model.index(selectedRow, 2), value2, QtCore.Qt.EditRole)
+            model.setData(model.index(selectedRow, 3), value3, QtCore.Qt.EditRole)
+            model.setData(model.index(selectedRow, 4), value4, QtCore.Qt.EditRole)
+            model.setData(model.index(selectedRow, 5), value5, QtCore.Qt.EditRole)
+            
+            if model.submitAll():
+                print("Data updated successfully.")
+            else:
+                print("Failed to update data:", model.lastError().text())
+        else:
+            print("No row selected.")
+        
+        self.comboBoxrank.setCurrentIndex(0)
+        self.lineEditfirstname.clear()
+        self.lineEditlastname.clear()
+        self.lineEditpersonnelId.clear()
+        self.lineEditnationalId.clear()
+
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "نرم افزار درمانگاهی"))
@@ -382,9 +470,6 @@ class UiMainWindow(object):
         self.tableView.setSortingEnabled(False)
         self.pushButtonsearch.setText(_translate("mainWindow", "جستجو بر اساس شماره ملی"))
         self.pushButtonlab.setText(_translate("mainWindow", "آزمایش"))
-
-
-
 
 if __name__ == "__main__":
     import sys
