@@ -238,6 +238,7 @@ class UiMainWindow(object):
         font.setUnderline(False)
         self.tableView.setFont(font)
         self.tableView.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.tableView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableView.setObjectName("tableView")
         self.pushButtonsearch = QtWidgets.QPushButton(self.centralwidget)
         self.pushButtonsearch.setGeometry(QtCore.QRect(50, 460, 171, 28))
@@ -312,6 +313,7 @@ class UiMainWindow(object):
             self.pushButtonsubmit.clicked.connect(self.saveComboBoxDataToDatabase)
             self.pushButtonedit.clicked.connect(self.updateDataInDatabase)
             self.pushButtonsearch.clicked.connect(self.searchInDatabase)
+            self.tableView.clicked.connect(self.showSelectedRowData)
 
         else:
             print("Failed to connect to database")
@@ -462,6 +464,31 @@ class UiMainWindow(object):
         
         self.lineEditsearch.clear()
 
+    def showSelectedRowData(self):
+        model = self.tableView.model()
+
+            # دریافت ردیف‌های انتخاب شده
+        selected_indexes = self.tableView.selectedIndexes()
+        # index = self.comboBoxrank.currentIndex()
+        # value1 = model.index(selected_row, 1).data
+
+            # بررسی آیا ردیفی انتخاب شده است
+        if selected_indexes:
+                # دریافت شماره ردیف انتخاب شده
+            selected_row = selected_indexes[0].row()
+
+                # دریافت مقادیر سلول‌های ردیف انتخاب شده
+            value2 = model.index(selected_row, 2).data()
+            value3 = model.index(selected_row, 3).data()
+            value4 = model.index(selected_row, 4).data()
+            value5 = model.index(selected_row, 5).data()
+
+            # self.comboBoxrank.setCurrentIndex(index)
+            self.lineEditfirstname.setText(value2)
+            self.lineEditlastname.setText(value3)
+            self.lineEditpersonnelId.setText(str(value4))
+            self.lineEditnationalId.setText(str(value5))
+    
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "نرم افزار درمانگاهی"))
