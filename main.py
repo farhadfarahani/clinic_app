@@ -238,13 +238,6 @@ class UiMainWindow(object):
         font.setUnderline(False)
         self.tableView.setFont(font)
         self.tableView.setLayoutDirection(QtCore.Qt.RightToLeft)
-        # self.tableView.setFrameShape(QtWidgets.QFrame.Box)
-        # self.tableView.setLineWidth(2)
-        # self.tableView.setMidLineWidth(1)
-        # self.tableView.setDragEnabled(False)
-        # self.tableView.setShowGrid(True)
-        # self.tableView.setGridStyle(QtCore.Qt.SolidLine)
-        # self.tableView.setWordWrap(True)
         self.tableView.setObjectName("tableView")
         self.pushButtonsearch = QtWidgets.QPushButton(self.centralwidget)
         self.pushButtonsearch.setGeometry(QtCore.QRect(50, 460, 171, 28))
@@ -318,6 +311,7 @@ class UiMainWindow(object):
             self.pushButtondelete.clicked.connect(self.deleteDataFromDatabase)
             self.pushButtonsubmit.clicked.connect(self.saveComboBoxDataToDatabase)
             self.pushButtonedit.clicked.connect(self.updateDataInDatabase)
+            self.pushButtonsearch.clicked.connect(self.searchInDatabase)
 
         else:
             print("Failed to connect to database")
@@ -354,7 +348,7 @@ class UiMainWindow(object):
         
         if value1:
             query = QtSql.QSqlQuery()
-            query.prepare("INSERT INTO Ranks (Rank) VALUES (?)")
+            query.prepare("INSERT INTO Patients (Rankp) VALUES (?)")
             query.addBindValue(value1)
             if query.exec_():
                 print("Data inserted successfully.")
@@ -380,6 +374,7 @@ class UiMainWindow(object):
             print("Failed to submit changes.")
             model.database().rollback()
         
+        self.comboBoxrank.setCurrentIndex(0)
         self.lineEditfirstname.clear()
         self.lineEditlastname.clear()
         self.lineEditpersonnelId.clear()
@@ -389,7 +384,7 @@ class UiMainWindow(object):
         selectedValue = self.comboBoxrank.currentText()
         if selectedValue:
             query = QtSql.QSqlQuery()
-            query.prepare("INSERT INTO Ranks (Rank) VALUES (?)")
+            query.prepare("INSERT INTO Patients (Rankp) VALUES (?)")
             query.addBindValue(selectedValue)
             if query.exec_():
                 print("Data inserted successfully.")
@@ -421,6 +416,7 @@ class UiMainWindow(object):
         else:
             print("Failed to submit changes.")
             model.database().rollback()
+        self.comboBoxrank.setCurrentIndex(0)
 
     def updateDataInDatabase(self):
         selectedRow = self.tableView.currentIndex().row()
@@ -451,6 +447,20 @@ class UiMainWindow(object):
         self.lineEditlastname.clear()
         self.lineEditpersonnelId.clear()
         self.lineEditnationalId.clear()
+
+    def searchInDatabase(self):
+        model = self.tableView.model()
+
+        # خواندن مقدار ورودی از QLineEdit
+        search_value = self.lineEditsearch.text()
+
+        # اجرای کوئری جستجو با استفاده از عبارت WHERE
+        model.setFilter("NationalId LIKE '%{}%'".format(search_value))
+
+        # بازیابی نتایج جستجو
+        model.select()
+        
+        self.lineEditsearch.clear()
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
