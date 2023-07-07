@@ -13,11 +13,6 @@ class UiMainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(1200, 700)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(mainWindow.sizePolicy().hasHeightForWidth())
-        mainWindow.setSizePolicy(sizePolicy)
         mainWindow.setMinimumSize(QtCore.QSize(1200, 700))
         mainWindow.setMaximumSize(QtCore.QSize(1200, 700))
         mainWindow.setSizeIncrement(QtCore.QSize(100, 100))
@@ -26,7 +21,6 @@ class UiMainWindow(object):
         font.setPointSize(9)
         font.setUnderline(False)
         mainWindow.setFont(font)
-
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.lblproject = QtWidgets.QLabel(self.centralwidget)
@@ -287,6 +281,7 @@ class UiMainWindow(object):
 
         self.retranslateUi(mainWindow)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
+        self.setFixedSize()
         
 
         db = QtSql.QSqlDatabase.addDatabase("QODBC")
@@ -325,9 +320,6 @@ class UiMainWindow(object):
             value = query.value(0)
             self.comboBoxrank.addItem(value)
             
-
-
-
     def addDataToDatabase(self):
         model = self.tableView.model()
 
@@ -508,6 +500,9 @@ class UiMainWindow(object):
         self.pushButtonsearch.setText(_translate("mainWindow", "جستجو بر اساس شماره ملی"))
         self.pushButtonlab.setText(_translate("mainWindow", "آزمایش"))
 
+    def setFixedSize(self):
+        self.centralwidget.setFixedSize(1200, 700)
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -524,6 +519,6 @@ if __name__ == "__main__":
     test_window = tests.UiTest()
     test = QtWidgets.QDialog()
     test_window.setupUi(test)
-    ui1.pushButtonnewlab.clicked.connect(lambda : test.exec_())
+    # ui1.pushButtonnewlab.clicked.connect(lambda : test.exec_())
 
     sys.exit(app.exec_())
