@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class UiPatology(object):
     def setupUi(self, Form):
-        Form.setObjectName("Form")
+        Form.setObjectName("Laboratory")
         Form.resize(1200, 700)
         Form.setMinimumSize(QtCore.QSize(1200, 700))
         Form.setMaximumSize(QtCore.QSize(1200, 700))
@@ -1656,7 +1656,7 @@ class UiPatology(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "آزمایشگاه"))
         self.label_7.setText(_translate("Form", "GLOCOSE"))
         self.label_9.setText(_translate("Form", "UREA"))
         self.label_12.setText(_translate("Form", "ALP"))
